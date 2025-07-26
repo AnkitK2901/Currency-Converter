@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pinnacle Currency Converter</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="https://pinnaclelabs.tech/wp-content/uploads/2023/09/webheadder.png.webp" type="image/webp">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css"/>
+    
+</head>
+
+<body>
+
+    <div class="converter-wrapper">
+        <div class="card-header">
+            <img src="https://pinnaclelabs.tech/wp-content/uploads/2023/09/webheadder.png.webp" alt="Pinnacle Labs Logo"
+                class="logo">
+            <h1>Currency Exchange</h1>
+        </div>
+
+        <form id="converter-form" class="card-body">
+            <div class="form-group">
+                <label for="amount">Amount</label>
+                <div class="amount-input">
+                    <span id="amount-symbol">$</span>
+                    <input type="number" id="amount" value="100" required>
+                </div>
+            </div>
+
+            <div class="currency-fields">
+                <div class="form-group">
+                    <label for="from-currency">From</label>
+                    <select id="from-currency"></select>
+                </div>
+
+                <button type="button" id="swap-button" class="swap-btn" title="Swap Currencies">
+
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M17 4l4 4-4 4" />
+                        <path d="M21 8H3" />
+                        <path d="M7 20l-4-4 4-4" />
+                        <path d="M3 16h18" />
+                    </svg>
+
+                </button>
+
+                <div class="form-group">
+                    <label for="to-currency">To</label>
+                    <select id="to-currency"></select>
+                </div>
+            </div>
+
+            <button type="submit" id="convert-button" class="convert-btn">Convert</button>
+        </form>
+
+        <div id="result-container" class="result-wrapper hidden">
+            <p id="result-text"></p>
+            <small id="rate-text"></small>
+        </div>
+
+        <div id="error-container" class="error-wrapper hidden">
+            <p id="error-text"></p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/decimal.js@10.4.3/decimal.min.js"></script>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
