@@ -390,3 +390,15 @@ select {
         font-size: 1rem;
     }
 }
+
+#converter-form > div.currency-fields > div:nth-child(1) > div > div.choices__inner{
+    background: transparent;
+    border: none;
+    width: max-content;
+}
+
+#converter-form > div.currency-fields > div:nth-child(3) > div > div.choices__inner{
+    background: transparent;
+    border: none;
+    width: max-content;
+}

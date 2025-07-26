@@ -129,7 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const currencyOptions = Object.entries(currencies).map(([code, name]) => ({
                 value: code,
-                label: `${code} - ${name}`,
+                label: `${code}`,
                 customProperties: {
                     symbol: currencySymbols[code] || code
                 }
