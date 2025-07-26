@@ -49,6 +49,31 @@ document.addEventListener('DOMContentLoaded', () => {
             shouldSort: false,
             searchResultLimit: 10,
             position: 'auto',
+            //
+            renderChoiceLabel: function (item) {
+                return item.customProperties?.fullLabel || item.label;
+            },
+            callbackOnCreateTemplates: function (template) {
+                return {
+                    item: function (classNames, data) {
+                        return template(`
+                        <div class="${classNames.item} ${data.highlighted ? classNames.highlightedState : classNames.itemSelectable}"
+                            data-item data-id="${data.id}" data-value="${data.value}" ${data.active ? 'aria-selected="true"' : ''}>
+                            ${data.value}
+                        </div>
+                    `);
+                    },
+                    choice: function (classNames, data) {
+                        return template(`
+                        <div class="${classNames.item} ${classNames.itemChoice} ${data.disabled ? classNames.itemDisabled : classNames.itemSelectable}"
+                            data-select-text="" data-choice data-id="${data.id}" data-value="${data.value}" ${data.disabled ? 'data-choice-disabled aria-disabled="true"' : 'data-choice-selectable'}>
+                            ${data.customProperties?.fullLabel || data.label}
+                        </div>
+                    `);
+                    }
+                };
+            },
+            //
             classNames: {
                 containerOuter: 'choices',
                 containerInner: 'choices__inner',
@@ -123,15 +148,15 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!response.ok) throw new Error('Failed to load currency list.');
 
             const currencies = await response.json();
-            
+
             fromCurrencyChoices = initChoices(fromCurrencySelect, 'From currency');
             toCurrencyChoices = initChoices(toCurrencySelect, 'To currency');
 
             const currencyOptions = Object.entries(currencies).map(([code, name]) => ({
                 value: code,
-                label: `${code}`,
+                label: code+name, // What appears after selection (just code)
                 customProperties: {
-                    symbol: currencySymbols[code] || code
+                    fullLabel: `${code} - ${name}` // What appears in the dropdown
                 }
             }));
 
@@ -153,37 +178,31 @@ document.addEventListener('DOMContentLoaded', () => {
         resultContainer.classList.add('hidden');
         hideError();
 
-        try {
-            // In a real app, replace this with your actual API endpoint
-            // For demo purposes, we'll simulate an API response
-            const mockRates = {
-                USD: { EUR: 0.93, GBP: 0.79, INR: 83.29 },
-                EUR: { USD: 1.07, GBP: 0.85, INR: 89.42 },
-                GBP: { USD: 1.26, EUR: 1.17, INR: 105.12 },
-                INR: { USD: 0.012, EUR: 0.011, GBP: 0.0095 }
-            };
-            
-            // Simulate API delay
-            await new Promise(resolve => setTimeout(resolve, 500));
-            
-            const rate = mockRates[fromCurrency]?.[toCurrency] || 
-                        (1 + Math.random() * 0.1 - 0.05); // Random rate for other pairs
+        // This URL calls YOUR Java backend server
+        const backendApiUrl = `/api/convert?amount=${amount}&from=${fromCurrency}&to=${toCurrency}`;
 
-            if (!rate) {
-                throw new Error(`Could not find exchange rate for ${toCurrency}`);
+        try {
+            // Fetch data from your Java backend
+            const response = await fetch(backendApiUrl);
+            const data = await response.json();
+
+            if (!response.ok || data.error) {
+                throw new Error(data.error || 'Conversion failed.');
             }
 
-            const decimalRate = new Decimal(rate);
-            const convertedAmount = new Decimal(amount).times(decimalRate);
+            // Use the real data returned from the Java server
+            const convertedAmount = new Decimal(data.convertedAmount);
+            const rate = new Decimal(data.rate);
 
             resultText.innerHTML = `
-                <span class="from-amount">${formatCurrency(amount, fromCurrency)}</span>
-                <span class="equals">=</span>
-                <span class="to-amount">${formatCurrency(convertedAmount, toCurrency)}</span>
-            `;
-            
-            rateText.textContent = `1 ${fromCurrency} = ${decimalRate.toDecimalPlaces(6)} ${toCurrency}`;
+            <span class="from-amount">${formatCurrency(amount, fromCurrency)}</span>
+            <span class="equals">=</span>
+            <span class="to-amount">${formatCurrency(convertedAmount, toCurrency)}</span>
+        `;
+
+            rateText.textContent = `1 ${fromCurrency} = ${rate.toDecimalPlaces(6)} ${toCurrency}`;
             resultContainer.classList.remove('hidden');
+
         } catch (err) {
             showError(err.message || 'Conversion failed. Please try again.');
             console.error('Conversion error:', err);

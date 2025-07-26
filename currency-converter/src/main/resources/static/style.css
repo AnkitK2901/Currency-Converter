@@ -34,20 +34,29 @@ body {
 .converter-wrapper {
     width: 100%;
     max-width: 420px;
+    /* max-width: max-content; */
     background: var(--card-background);
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius);
     box-shadow: 0 15px 35px var(--shadow-color);
-    backdrop-filter: blur(10px); /* This creates the glass effect */
+    backdrop-filter: blur(10px);
+    /* This creates the glass effect */
     -webkit-backdrop-filter: blur(10px);
-    overflow: hidden;
+    /* overflow: hidden; */
     transition: transform 0.3s ease;
     animation: fadeIn 0.5s ease-out;
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .card-header {
@@ -101,7 +110,8 @@ body {
     color: var(--secondary-color);
 }
 
-input, select {
+input,
+select {
     width: 100%;
     padding: 14px;
     background: transparent;
@@ -114,7 +124,8 @@ input, select {
     -webkit-appearance: none;
 }
 
-input:focus, select:focus {
+input:focus,
+select:focus {
     outline: none;
 }
 
@@ -181,15 +192,23 @@ select {
     cursor: wait;
 }
 
-.result-wrapper, .error-wrapper {
+.result-wrapper,
+.error-wrapper {
     padding: 20px 24px;
     text-align: center;
     animation: slideIn 0.4s ease-out;
 }
 
 @keyframes slideIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .result-wrapper {
@@ -223,10 +242,12 @@ select {
 .hidden {
     display: none;
 }
+
 .card-header .logo {
     height: 40px;
     width: auto;
 }
+
 /* ========================================= */
 /* Responsive Design (Media Queries)    */
 /* ========================================= */
@@ -253,7 +274,8 @@ select {
         width: 100%;
     }
 
-    .card-header, .card-body {
+    .card-header,
+    .card-body {
         /* Reduce padding inside the card */
         padding: 20px;
     }
@@ -267,7 +289,7 @@ select {
         /* Reduce the gap to save space */
         gap: 10px;
     }
-    
+
     .swap-btn {
         /* Make the swap button slightly smaller */
         height: 44px;
@@ -283,6 +305,7 @@ select {
         font-size: 0.85rem;
     }
 }
+
 /* ========================================= */
 /* Enhanced Dropdown Styles                  */
 /* ========================================= */
@@ -318,7 +341,7 @@ select {
     padding-bottom: 10px;
 }
 
-.choices__list--dropdown, 
+.choices__list--dropdown,
 .choices__list[aria-expanded] {
     background-color: var(--background-color);
     border: 1px solid var(--border-color);
@@ -328,7 +351,7 @@ select {
     z-index: 999;
 }
 
-.choices__list--dropdown .choices__item--selectable, 
+.choices__list--dropdown .choices__item--selectable,
 .choices__list[aria-expanded] .choices__item--selectable {
     padding-right: 10px;
 }
@@ -336,13 +359,14 @@ select {
 .choices__item {
     color: var(--text-color);
     padding: 10px 16px;
-    border-radius: 8px;
+    /* border-radius: 8px; */
     transition: all 0.2s ease;
+    font-weight: bolder;
 }
 
 .choices__item--selectable.is-highlighted {
     background-color: rgba(106, 90, 249, 0.3);
-    color: #fff;
+    color: #000;
 }
 
 .choices__input {
@@ -375,8 +399,8 @@ select {
         padding: 8px 12px;
         font-size: 1rem;
     }
-    
-    .choices__list--dropdown, 
+
+    .choices__list--dropdown,
     .choices__list[aria-expanded] {
         position: fixed;
         width: calc(100% - 40px) !important;
@@ -385,20 +409,85 @@ select {
         max-height: 50vh;
         overflow-y: auto;
     }
-    
+
     .choices__input {
         font-size: 1rem;
     }
 }
 
-#converter-form > div.currency-fields > div:nth-child(1) > div > div.choices__inner{
+#converter-form>div.currency-fields>div:nth-child(1)>div>div.choices__inner {
     background: transparent;
     border: none;
     width: max-content;
 }
 
-#converter-form > div.currency-fields > div:nth-child(3) > div > div.choices__inner{
+#converter-form>div.currency-fields>div:nth-child(3)>div>div.choices__inner {
     background: transparent;
     border: none;
     width: max-content;
+}
+
+::-webkit-scrollbar {
+    display: none !important;
+}
+
+.is-active {
+    outline: none !important;
+    background: #161623 !important;
+}
+
+#amount::-webkit-inner-spin-button {
+    display: none !important;
+}
+
+#converter-form>div.currency-fields>div:nth-child(1)>div>div.choices__list.choices__list--dropdown>input {
+    background: #000 !important;
+    text-transform: capitalize;
+}
+
+#converter-form>div.currency-fields>div:nth-child(3)>div>div.choices__list.choices__list--dropdown>input {
+    background: #000 !important;
+    text-transform: capitalize;
+}
+
+#converter-form > div.currency-fields > div:nth-child(1) > div > div.choices__list.choices__list--dropdown{
+    width: max-content !important;
+    border-color: transparent !important;
+}
+
+#converter-form > div.currency-fields > div:nth-child(3) > div > div.choices__list.choices__list--dropdown{
+    width: max-content !important;
+    border-color: transparent !important;
+}
+
+#converter-form > div.currency-fields > div:nth-child(1) > div > div.choices__list.choices__list--dropdown > div > div{
+    /* margin: 5px; */
+    padding: 8px 10px;
+    font-weight: bolder;
+    border-radius: 8px !important;
+    /* text-align: left; */
+}
+
+#converter-form > div.currency-fields > div:nth-child(3) > div > div.choices__list.choices__list--dropdown > div > div{
+    /* margin: 5px 0; */
+    padding: 8px 10px;
+    font-weight: bolder;
+    border-radius: 8px !important;
+}
+
+
+#converter-form > div.currency-fields > div:nth-child(1) > div > div.choices__list.choices__list--dropdown > div > div:hover{
+    cursor: pointer;
+    /* background: #fff; */
+    /* color: #000; */
+    transition: all 0.25s ease-in-out;
+    background: linear-gradient(90deg, var(--primary-color), #8e44ad);
+}
+
+#converter-form > div.currency-fields > div:nth-child(3) > div > div.choices__list.choices__list--dropdown > div > div:hover{
+    cursor: pointer;
+    /* background: #fff; */
+    /* color: #000; */
+    transition: all 0.25s ease-in-out;
+    background: linear-gradient(90deg, var(--primary-color), #8e44ad);
 }
