@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
             searchPlaceholderValue: 'Search currencies...',
             placeholderValue: placeholder,
             itemSelectText: '',
-            shouldSort: false,
+            shouldSort: true,
             searchResultLimit: 10,
             position: 'auto',
             //
