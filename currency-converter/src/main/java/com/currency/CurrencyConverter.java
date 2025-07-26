@@ -1,4 +1,4 @@
-package com.quiz;
+package com.currency;
 
 import java.io.IOException;
 import java.io.InputStream;
