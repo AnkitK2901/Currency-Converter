@@ -10,6 +10,8 @@
     --error-color: #f25f5c;
     --font-family: 'Nunito', sans-serif;
     --border-radius: 16px;
+    --hover-glow: rgba(106, 90, 249, 0.4);
+    --focus-glow: rgba(106, 90, 249, 0.6);
 }
 
 * {
@@ -34,15 +36,12 @@ body {
 .converter-wrapper {
     width: 100%;
     max-width: 420px;
-    /* max-width: max-content; */
     background: var(--card-background);
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius);
     box-shadow: 0 15px 35px var(--shadow-color);
     backdrop-filter: blur(10px);
-    /* This creates the glass effect */
     -webkit-backdrop-filter: blur(10px);
-    /* overflow: hidden; */
     transition: transform 0.3s ease;
     animation: fadeIn 0.5s ease-out;
 }
@@ -52,7 +51,6 @@ body {
         opacity: 0;
         transform: translateY(20px);
     }
-
     to {
         opacity: 1;
         transform: translateY(0);
@@ -95,19 +93,56 @@ body {
     font-size: 0.9rem;
     font-weight: 600;
     color: rgba(255, 255, 255, 0.7);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
+/* Enhanced Amount Input Container */
 .amount-input {
     display: flex;
     align-items: center;
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border-color);
     border-radius: 12px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.amount-input::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, transparent, rgba(106, 90, 249, 0.1), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.amount-input:hover {
+    border-color: var(--hover-glow);
+    box-shadow: 0 0 0 2px rgba(106, 90, 249, 0.2);
+}
+
+.amount-input:hover::before {
+    opacity: 1;
+}
+
+.amount-input:focus-within {
+    border-color: var(--focus-glow);
+    box-shadow: 0 0 0 3px rgba(106, 90, 249, 0.3);
+    transform: translateY(-1px);
 }
 
 .amount-input span {
     padding-left: 16px;
     font-weight: 700;
     color: var(--secondary-color);
+    font-size: 1.1rem;
+    text-shadow: 0 0 10px rgba(246, 157, 60, 0.3);
 }
 
 input,
@@ -122,6 +157,8 @@ select {
     font-weight: 600;
     appearance: none;
     -webkit-appearance: none;
+    z-index: 1;
+    position: relative;
 }
 
 input:focus,
@@ -129,44 +166,111 @@ select:focus {
     outline: none;
 }
 
-select {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23e0e0e0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 16px center;
-    padding-right: 40px;
-    background-color: rgba(0, 0, 0, 0.2);
-    border-radius: 12px;
+input::-webkit-inner-spin-button {
+    display: none !important;
 }
 
+/* Enhanced Currency Fields Container */
 .currency-fields {
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
     gap: 15px;
+    position: relative;
 }
 
 .currency-fields .form-group {
     flex: 1;
+    position: relative;
 }
 
+/* Enhanced Currency Containers */
+.currency-container {
+    position: relative;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.currency-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(106, 90, 249, 0.1), rgba(246, 157, 60, 0.1));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.currency-container:hover {
+    border-color: var(--hover-glow);
+    box-shadow: 0 4px 15px rgba(106, 90, 249, 0.2);
+    transform: translateY(-2px);
+}
+
+.currency-container:hover::before {
+    opacity: 1;
+}
+
+.currency-container:focus-within {
+    border-color: var(--focus-glow);
+    box-shadow: 0 0 0 3px rgba(106, 90, 249, 0.3);
+    transform: translateY(-1px);
+}
+
+/* Enhanced Swap Button */
 .swap-btn {
     height: 48px;
     width: 48px;
     flex-shrink: 0;
     border-radius: 50%;
-    background: var(--primary-color);
+    background: linear-gradient(135deg, var(--primary-color), #8e44ad);
     border: 2px solid var(--border-color);
     color: #fff;
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    transition: transform 0.3s ease, background 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(106, 90, 249, 0.3);
+}
+
+.swap-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, var(--secondary-color), #ff6b6b);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: 50%;
 }
 
 .swap-btn:hover {
-    transform: rotate(180deg) scale(1.1);
-    background: var(--secondary-color);
+    transform: rotate(180deg) scale(1.15);
+    box-shadow: 0 8px 25px rgba(246, 157, 60, 0.4);
+}
+
+.swap-btn:hover::before {
+    opacity: 1;
+}
+
+.swap-btn:active {
+    transform: rotate(180deg) scale(0.95);
+}
+
+.swap-btn svg {
+    z-index: 1;
+    position: relative;
 }
 
 .convert-btn {
@@ -180,11 +284,28 @@ select {
     border-radius: 12px;
     cursor: pointer;
     transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.convert-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
 }
 
 .convert-btn:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 15px rgba(106, 90, 249, 0.3);
+}
+
+.convert-btn:hover::before {
+    left: 100%;
 }
 
 .convert-btn:disabled {
@@ -204,7 +325,6 @@ select {
         opacity: 0;
         transform: translateY(10px);
     }
-
     to {
         opacity: 1;
         transform: translateY(0);
@@ -249,68 +369,9 @@ select {
 }
 
 /* ========================================= */
-/* Responsive Design (Media Queries)    */
+/* Enhanced Dropdown Styles (Choices.js) - Restored Original Functionality */
 /* ========================================= */
 
-/* For Tablets and smaller desktops */
-@media (max-width: 768px) {
-    .converter-wrapper {
-        /* Prevents the card from being too large on tablets */
-        max-width: 380px;
-    }
-}
-
-
-/* For Mobile Phones */
-@media (max-width: 480px) {
-    body {
-        /* Reduce padding on the sides of the screen */
-        padding: 10px;
-    }
-
-    .converter-wrapper {
-        /* Use the full width of the screen, with small margins */
-        margin: 10px;
-        width: 100%;
-    }
-
-    .card-header,
-    .card-body {
-        /* Reduce padding inside the card */
-        padding: 20px;
-    }
-
-    .card-header h1 {
-        /* Make header text smaller */
-        font-size: 1.3rem;
-    }
-
-    .currency-fields {
-        /* Reduce the gap to save space */
-        gap: 10px;
-    }
-
-    .swap-btn {
-        /* Make the swap button slightly smaller */
-        height: 44px;
-        width: 44px;
-    }
-
-    #result-text {
-        /* Make the main result text smaller to fit */
-        font-size: 1.3rem;
-    }
-
-    #rate-text {
-        font-size: 0.85rem;
-    }
-}
-
-/* ========================================= */
-/* Enhanced Dropdown Styles                  */
-/* ========================================= */
-
-/* Choices.js overrides */
 .choices {
     margin-bottom: 0;
     font-size: 1rem;
@@ -359,7 +420,6 @@ select {
 .choices__item {
     color: var(--text-color);
     padding: 10px 16px;
-    /* border-radius: 8px; */
     transition: all 0.2s ease;
     font-weight: bolder;
 }
@@ -393,40 +453,64 @@ select {
     margin-top: -6px;
 }
 
-/* Mobile-specific dropdown styles */
-@media (max-width: 480px) {
-    .choices__inner {
-        padding: 8px 12px;
-        font-size: 1rem;
-    }
-
-    .choices__list--dropdown,
-    .choices__list[aria-expanded] {
-        position: fixed;
-        width: calc(100% - 40px) !important;
-        left: 20px !important;
-        top: auto !important;
-        max-height: 50vh;
-        overflow-y: auto;
-    }
-
-    .choices__input {
-        font-size: 1rem;
-    }
-}
-
-#converter-form>div.currency-fields>div:nth-child(1)>div>div.choices__inner {
+/* Original Working Styles for Currency Dropdowns - RESTORED */
+#converter-form > div.currency-fields > div:nth-child(1) > div > div.choices__inner {
     background: transparent;
     border: none;
     width: max-content;
 }
 
-#converter-form>div.currency-fields>div:nth-child(3)>div>div.choices__inner {
+#converter-form > div.currency-fields > div:nth-child(3) > div > div.choices__inner {
     background: transparent;
     border: none;
     width: max-content;
 }
 
+#converter-form > div.currency-fields > div:nth-child(1) > div > div.choices__list.choices__list--dropdown > input {
+    background: #000 !important;
+    text-transform: capitalize;
+}
+
+#converter-form > div.currency-fields > div:nth-child(3) > div > div.choices__list.choices__list--dropdown > input {
+    background: #000 !important;
+    text-transform: capitalize;
+}
+
+#converter-form > div.currency-fields > div:nth-child(1) > div > div.choices__list.choices__list--dropdown {
+    width: max-content !important;
+    border-color: transparent !important;
+}
+
+#converter-form > div.currency-fields > div:nth-child(3) > div > div.choices__list.choices__list--dropdown {
+    width: max-content !important;
+    border-color: transparent !important;
+}
+
+#converter-form > div.currency-fields > div:nth-child(1) > div > div.choices__list.choices__list--dropdown > div > div {
+    padding: 8px 10px;
+    font-weight: bolder;
+    border-radius: 8px !important;
+}
+
+#converter-form > div.currency-fields > div:nth-child(3) > div > div.choices__list.choices__list--dropdown > div > div {
+    padding: 8px 10px;
+    font-weight: bolder;
+    border-radius: 8px !important;
+}
+
+#converter-form > div.currency-fields > div:nth-child(1) > div > div.choices__list.choices__list--dropdown > div > div:hover {
+    cursor: pointer;
+    transition: all 0.25s ease-in-out;
+    background: linear-gradient(90deg, var(--primary-color), #8e44ad);
+}
+
+#converter-form > div.currency-fields > div:nth-child(3) > div > div.choices__list.choices__list--dropdown > div > div:hover {
+    cursor: pointer;
+    transition: all 0.25s ease-in-out;
+    background: linear-gradient(90deg, var(--primary-color), #8e44ad);
+}
+
+/* Scrollbar for dropdowns */
 ::-webkit-scrollbar {
     display: none !important;
 }
@@ -436,58 +520,81 @@ select {
     background: #161623 !important;
 }
 
-#amount::-webkit-inner-spin-button {
-    display: none !important;
+/* ========================================= */
+/* Responsive Design (Media Queries)         */
+/* ========================================= */
+/* ========================================= */
+/* Responsive Design (Media Queries)         */
+/* ========================================= */
+
+@media (max-width: 768px) {
+    .converter-wrapper {
+        max-width: 380px;
+    }
 }
 
-#converter-form>div.currency-fields>div:nth-child(1)>div>div.choices__list.choices__list--dropdown>input {
-    background: #000 !important;
-    text-transform: capitalize;
-}
+/* Corrected Mobile Styles - Attempt 3: Ensuring Full Visibility */
+ @media (max-width: 480px) {
+  body {
+  padding: 10px;
+  }
 
-#converter-form>div.currency-fields>div:nth-child(3)>div>div.choices__list.choices__list--dropdown>input {
-    background: #000 !important;
-    text-transform: capitalize;
-}
+  .converter-wrapper {
+  margin: 10px;
+  width: 100%;
+  }
 
-#converter-form > div.currency-fields > div:nth-child(1) > div > div.choices__list.choices__list--dropdown{
-    width: max-content !important;
-    border-color: transparent !important;
-}
+  .card-header,
+  .card-body {
+  padding: 20px;
+  }
 
-#converter-form > div.currency-fields > div:nth-child(3) > div > div.choices__list.choices__list--dropdown{
-    width: max-content !important;
-    border-color: transparent !important;
-}
+  .card-header h1 {
+  font-size: 1.3rem;
+  }
 
-#converter-form > div.currency-fields > div:nth-child(1) > div > div.choices__list.choices__list--dropdown > div > div{
-    /* margin: 5px; */
-    padding: 8px 10px;
-    font-weight: bolder;
-    border-radius: 8px !important;
-    /* text-align: left; */
-}
+  .currency-fields {
+  gap: 10px;
+  }
 
-#converter-form > div.currency-fields > div:nth-child(3) > div > div.choices__list.choices__list--dropdown > div > div{
-    /* margin: 5px 0; */
-    padding: 8px 10px;
-    font-weight: bolder;
-    border-radius: 8px !important;
-}
+  .swap-btn {
+  height: 44px;
+  width: 44px;
+  }
 
+  #result-text {
+  font-size: 1.3rem;
+  }
 
-#converter-form > div.currency-fields > div:nth-child(1) > div > div.choices__list.choices__list--dropdown > div > div:hover{
-    cursor: pointer;
-    /* background: #fff; */
-    /* color: #000; */
-    transition: all 0.25s ease-in-out;
-    background: linear-gradient(90deg, var(--primary-color), #8e44ad);
-}
+  #rate-text {
+  font-size: 0.85rem;
+  }
 
-#converter-form > div.currency-fields > div:nth-child(3) > div > div.choices__list.choices__list--dropdown > div > div:hover{
-    cursor: pointer;
-    /* background: #fff; */
-    /* color: #000; */
-    transition: all 0.25s ease-in-out;
-    background: linear-gradient(90deg, var(--primary-color), #8e44ad);
-}
+  .choices__inner {
+  padding: 8px 12px;
+  font-size: 1rem;
+  }
+
+  .choices__list--dropdown,
+  .choices__list--dropdown.is-open {
+  position: fixed !important;
+  top: auto !important;
+  bottom: auto !important;
+  left: 5% !important; /* Adjust left margin */
+  transform: translateX(0) !important; /* Remove horizontal centering */
+  width: 90% !important; /* Make it take up most of the screen width */
+  max-width: none !important; /* Override any max-width */
+  max-height: 60vh;
+  overflow-y: auto;
+  z-index: 1000;
+  border: 1px solid var(--border-color) !important;
+  background-color: var(--background-color) !important;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  margin: 10px auto !important; /* Add some top/bottom margin and attempt centering */
+  }
+
+  .choices__input {
+  font-size: 1rem;
+  }
+ }
