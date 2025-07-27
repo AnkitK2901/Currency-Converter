@@ -1,5 +1,10 @@
 package com.currency;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpServer;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -10,22 +15,39 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpServer;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 
 public class CurrencyConverter {
 
     // --- CONFIGURATION ---
-    private static final int SERVER_PORT = 8080;// on local host it will be 81 on server in my case it will be 80
-    // Your App ID from openexchangerates.org
+    private static final int SERVER_PORT = 8080;
     private static final String APP_ID = "3620f92c5c89408d955659bc11aa6bdf";
-    // CORRECTED API URL for openexchangerates.org
     private static final String API_URL = "https://openexchangerates.org/api/latest.json?app_id=" + APP_ID;
     private static final Gson gson = new Gson();
+
+    // --- CACHING SETUP ---
+    private static CachedData rateCache;
+    private static final long ONE_HOUR_IN_MILLIS = 3600 * 1000;
+
+    /**
+     * A simple nested class to hold cached data along with a timestamp.
+     */
+    static class CachedData {
+        private final JsonObject data;
+        private final long timestamp;
+
+        public CachedData(JsonObject data) {
+            this.data = data;
+            this.timestamp = System.currentTimeMillis();
+        }
+
+        public JsonObject getData() {
+            return data;
+        }
+
+        public boolean isExpired(long maxAgeMillis) {
+            return (System.currentTimeMillis() - timestamp) > maxAgeMillis;
+        }
+    }
 
     private static void handleCurrencyListRequest(HttpExchange exchange) throws IOException {
         if (!"GET".equals(exchange.getRequestMethod())) {
@@ -85,29 +107,38 @@ public class CurrencyConverter {
 
         try {
             double amount = Double.parseDouble(amountStr);
+            JsonObject rates;
 
-            // Fetch exchange rates from openexchangerates.org (base is always USD on free
-            // plan)
-            URL url = new URL(API_URL);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
+            // --- CACHING LOGIC ---
+            if (rateCache == null || rateCache.isExpired(ONE_HOUR_IN_MILLIS)) {
+                // System.out.println("LOG: Cache empty or expired. Fetching new rates from API.");
 
-            // Check for non-200 status codes
-            if (conn.getResponseCode() != 200) {
-                // Try to read the error stream from the API
-                String errorBody = new Scanner(conn.getErrorStream()).useDelimiter("\\A").next();
-                JsonObject errorJson = gson.fromJson(errorBody, JsonObject.class);
-                String errorMessage = errorJson.has("description") ? errorJson.get("description").getAsString()
-                        : "API request failed with status " + conn.getResponseCode();
-                sendResponse(exchange, 502, "{\"error\":\"" + errorMessage + "\"}");
-                return;
+                URL url = new URL(API_URL);
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("GET");
+
+                if (conn.getResponseCode() != 200) {
+                    String errorBody = new Scanner(conn.getErrorStream()).useDelimiter("\\A").next();
+                    JsonObject errorJson = gson.fromJson(errorBody, JsonObject.class);
+                    String errorMessage = errorJson.has("description") ? errorJson.get("description").getAsString()
+                            : "API request failed with status " + conn.getResponseCode();
+                    sendResponse(exchange, 502, "{\"error\":\"" + errorMessage + "\"}");
+                    return;
+                }
+
+                String responseBody = new Scanner(conn.getInputStream()).useDelimiter("\\A").next();
+                JsonObject jsonResponse = gson.fromJson(responseBody, JsonObject.class);
+                rates = jsonResponse.getAsJsonObject("rates");
+
+                // Save the newly fetched rates into the cache
+                rateCache = new CachedData(rates);
+
+            } else {
+                // System.out.println("LOG: Using fresh rates from cache.");
+                // Get rates directly from the cache
+                rates = rateCache.getData();
             }
-
-            String responseBody = new Scanner(conn.getInputStream()).useDelimiter("\\A").next();
-            JsonObject jsonResponse = gson.fromJson(responseBody, JsonObject.class);
-
-            // The JSON field is "rates", not "conversion_rates"
-            JsonObject rates = jsonResponse.getAsJsonObject("rates");
+            // --- END OF CACHING LOGIC ---
 
             if (!rates.has(fromCurrency) || !rates.has(toCurrency)) {
                 sendResponse(exchange, 400, "{\"error\":\"Invalid currency code provided.\"}");
@@ -115,17 +146,13 @@ public class CurrencyConverter {
             }
 
             // --- Calculation for USD-based rates ---
-            double fromRate = rates.get(fromCurrency).getAsDouble(); // Rate of 'from' currency against USD
-            double toRate = rates.get(toCurrency).getAsDouble(); // Rate of 'to' currency against USD
+            double fromRate = rates.get(fromCurrency).getAsDouble();
+            double toRate = rates.get(toCurrency).getAsDouble();
 
-            // Convert amount to USD first, then to the target currency
             double amountInUsd = amount / fromRate;
             double convertedAmount = amountInUsd * toRate;
-
-            // Calculate the direct rate for display purposes
             double directRate = toRate / fromRate;
 
-            // Send result back to client
             String jsonResult = String.format(
                     "{\"from\":\"%s\", \"to\":\"%s\", \"amount\":%.2f, \"convertedAmount\":%.2f, \"rate\":%.6f}",
                     fromCurrency, toCurrency, amount, convertedAmount, directRate);
@@ -141,27 +168,21 @@ public class CurrencyConverter {
         }
     }
 
-    // --- Helper methods (serveStaticFiles, getContentType, queryToMap,
-    // sendResponse) are unchanged ---
-    // (They are included here for completeness)
+    // --- Helper methods are unchanged ---
 
     private static void serveStaticFiles(HttpExchange exchange) throws IOException {
         String path = exchange.getRequestURI().getPath();
         if ("/".equals(path)) {
             path = "/index.html";
         }
-
         String resourcePath = "/static" + path;
         InputStream is = CurrencyConverter.class.getResourceAsStream(resourcePath);
-
         if (is == null) {
             sendResponse(exchange, 404, "File Not Found");
             return;
         }
-
         String contentType = getContentType(path);
         exchange.getResponseHeaders().set("Content-Type", contentType);
-
         exchange.sendResponseHeaders(200, 0);
         try (OutputStream os = exchange.getResponseBody()) {
             is.transferTo(os);

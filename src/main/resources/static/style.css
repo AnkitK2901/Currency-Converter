@@ -51,6 +51,7 @@ body {
         opacity: 0;
         transform: translateY(20px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -325,6 +326,7 @@ input::-webkit-inner-spin-button {
         opacity: 0;
         transform: translateY(10px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -454,57 +456,57 @@ input::-webkit-inner-spin-button {
 }
 
 /* Original Working Styles for Currency Dropdowns - RESTORED */
-#converter-form > div.currency-fields > div:nth-child(1) > div > div.choices__inner {
+#converter-form>div.currency-fields>div:nth-child(1)>div>div.choices__inner {
     background: transparent;
     border: none;
     width: max-content;
 }
 
-#converter-form > div.currency-fields > div:nth-child(3) > div > div.choices__inner {
+#converter-form>div.currency-fields>div:nth-child(3)>div>div.choices__inner {
     background: transparent;
     border: none;
     width: max-content;
 }
 
-#converter-form > div.currency-fields > div:nth-child(1) > div > div.choices__list.choices__list--dropdown > input {
+#converter-form>div.currency-fields>div:nth-child(1)>div>div.choices__list.choices__list--dropdown>input {
     background: #000 !important;
     text-transform: capitalize;
 }
 
-#converter-form > div.currency-fields > div:nth-child(3) > div > div.choices__list.choices__list--dropdown > input {
+#converter-form>div.currency-fields>div:nth-child(3)>div>div.choices__list.choices__list--dropdown>input {
     background: #000 !important;
     text-transform: capitalize;
 }
 
-#converter-form > div.currency-fields > div:nth-child(1) > div > div.choices__list.choices__list--dropdown {
+#converter-form>div.currency-fields>div:nth-child(1)>div>div.choices__list.choices__list--dropdown {
     width: max-content !important;
     border-color: transparent !important;
 }
 
-#converter-form > div.currency-fields > div:nth-child(3) > div > div.choices__list.choices__list--dropdown {
+#converter-form>div.currency-fields>div:nth-child(3)>div>div.choices__list.choices__list--dropdown {
     width: max-content !important;
     border-color: transparent !important;
 }
 
-#converter-form > div.currency-fields > div:nth-child(1) > div > div.choices__list.choices__list--dropdown > div > div {
+#converter-form>div.currency-fields>div:nth-child(1)>div>div.choices__list.choices__list--dropdown>div>div {
     padding: 8px 10px;
     font-weight: bolder;
     border-radius: 8px !important;
 }
 
-#converter-form > div.currency-fields > div:nth-child(3) > div > div.choices__list.choices__list--dropdown > div > div {
+#converter-form>div.currency-fields>div:nth-child(3)>div>div.choices__list.choices__list--dropdown>div>div {
     padding: 8px 10px;
     font-weight: bolder;
     border-radius: 8px !important;
 }
 
-#converter-form > div.currency-fields > div:nth-child(1) > div > div.choices__list.choices__list--dropdown > div > div:hover {
+#converter-form>div.currency-fields>div:nth-child(1)>div>div.choices__list.choices__list--dropdown>div>div:hover {
     cursor: pointer;
     transition: all 0.25s ease-in-out;
     background: linear-gradient(90deg, var(--primary-color), #8e44ad);
 }
 
-#converter-form > div.currency-fields > div:nth-child(3) > div > div.choices__list.choices__list--dropdown > div > div:hover {
+#converter-form>div.currency-fields>div:nth-child(3)>div>div.choices__list.choices__list--dropdown>div>div:hover {
     cursor: pointer;
     transition: all 0.25s ease-in-out;
     background: linear-gradient(90deg, var(--primary-color), #8e44ad);
@@ -534,67 +536,72 @@ input::-webkit-inner-spin-button {
 }
 
 /* Corrected Mobile Styles - Attempt 3: Ensuring Full Visibility */
- @media (max-width: 480px) {
-  body {
-  padding: 10px;
-  }
+@media (max-width: 480px) {
+    body {
+        padding: 10px;
+    }
 
-  .converter-wrapper {
-  margin: 10px;
-  width: 100%;
-  }
+    .converter-wrapper {
+        margin: 10px;
+        width: 100%;
+    }
 
-  .card-header,
-  .card-body {
-  padding: 20px;
-  }
+    .card-header,
+    .card-body {
+        padding: 20px;
+    }
 
-  .card-header h1 {
-  font-size: 1.3rem;
-  }
+    .card-header h1 {
+        font-size: 1.3rem;
+    }
 
-  .currency-fields {
-  gap: 10px;
-  }
+    .currency-fields {
+        gap: 10px;
+    }
 
-  .swap-btn {
-  height: 44px;
-  width: 44px;
-  }
+    .swap-btn {
+        height: 44px;
+        width: 44px;
+    }
 
-  #result-text {
-  font-size: 1.3rem;
-  }
+    #result-text {
+        font-size: 1.3rem;
+    }
 
-  #rate-text {
-  font-size: 0.85rem;
-  }
+    #rate-text {
+        font-size: 0.85rem;
+    }
 
-  .choices__inner {
-  padding: 8px 12px;
-  font-size: 1rem;
-  }
+    .choices__inner {
+        padding: 8px 12px;
+        font-size: 1rem;
+    }
 
-  .choices__list--dropdown,
-  .choices__list--dropdown.is-open {
-  position: fixed !important;
-  top: auto !important;
-  bottom: auto !important;
-  left: 5% !important; /* Adjust left margin */
-  transform: translateX(0) !important; /* Remove horizontal centering */
-  width: 90% !important; /* Make it take up most of the screen width */
-  max-width: none !important; /* Override any max-width */
-  max-height: 60vh;
-  overflow-y: auto;
-  z-index: 1000;
-  border: 1px solid var(--border-color) !important;
-  background-color: var(--background-color) !important;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-  margin: 10px auto !important; /* Add some top/bottom margin and attempt centering */
-  }
+    .choices__list--dropdown,
+    .choices__list--dropdown.is-open {
+        position: fixed !important;
+        top: auto !important;
+        bottom: auto !important;
+        left: 5% !important;
+        /* Adjust left margin */
+        transform: translateX(0) !important;
+        /* Remove horizontal centering */
+        width: 90% !important;
+        /* Make it take up most of the screen width */
+        max-width: none !important;
+        /* Override any max-width */
+        max-height: 60vh;
+        overflow-y: auto;
+        z-index: 1000;
+        border: 1px solid var(--border-color) !important;
+        background-color: var(--background-color) !important;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        margin: 10px auto !important;
+        /* Add some top/bottom margin and attempt centering */
+    }
 
-  .choices__input {
-  font-size: 1rem;
-  }
- }
+    .choices__input {
+        font-size: 1rem;
+    }
+}
