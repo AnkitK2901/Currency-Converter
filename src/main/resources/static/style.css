@@ -2,12 +2,12 @@
     --primary-color: #6a5af9;
     --secondary-color: #f69d3c;
     --background-color: #161623;
-    --text-color: #c61515;
+    --text-color: #e0e0e0;
     --card-background: rgba(255, 255, 255, 0.1);
     --border-color: rgba(255, 255, 255, 0.2);
     --shadow-color: rgba(0, 0, 0, 0.2);
     --success-color: #20c997;
-    --error-color: #ffffff;
+    --error-color: #f25f5c;
     --font-family: 'Nunito', sans-serif;
     --border-radius: 16px;
     --hover-glow: rgba(106, 90, 249, 0.4);
@@ -598,4 +598,3 @@ input::-webkit-inner-spin-button {
   font-size: 1rem;
   }
  }
- 
