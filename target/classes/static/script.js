@@ -144,7 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Main Functions ---
     async function populateCurrencies() {
         try {
-            const response = await fetch('https://openexchangerates.org/api/currencies.json');
+            const response = await fetch('https://openexchangerates.org/api/currencies.json?app_id=3620f92c5c89408d955659bc11aa6bdf');
             if (!response.ok) throw new Error('Failed to load currency list.');
 
             const currencies = await response.json();
@@ -154,7 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const currencyOptions = Object.entries(currencies).map(([code, name]) => ({
                 value: code,
-                label: code+name, // What appears after selection (just code)
+                label: code + name, // What appears after selection (just code)
                 customProperties: {
                     fullLabel: `${code} - ${name}` // What appears in the dropdown
                 }
