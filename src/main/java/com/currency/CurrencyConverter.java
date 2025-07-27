@@ -20,7 +20,7 @@ import java.math.RoundingMode;
 public class CurrencyConverter {
 
     // --- CONFIGURATION ---
-    private static final int SERVER_PORT = 8081;
+    private static final int SERVER_PORT = 8080;
     // Your App ID from openexchangerates.org
     private static final String APP_ID = "3620f92c5c89408d955659bc11aa6bdf";
     // CORRECTED API URL for openexchangerates.org
