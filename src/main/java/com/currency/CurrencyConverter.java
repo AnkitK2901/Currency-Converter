@@ -19,7 +19,7 @@ import java.util.Scanner;
 public class CurrencyConverter {
 
     // --- CONFIGURATION ---
-    private static final int SERVER_PORT = 8080;
+    private static final int SERVER_PORT = 8080;// on local host it will be 81, on server in my case it will be 80
     private static final String APP_ID = "3620f92c5c89408d955659bc11aa6bdf";
     private static final String API_URL = "https://openexchangerates.org/api/latest.json?app_id=" + APP_ID;
     private static final Gson gson = new Gson();
