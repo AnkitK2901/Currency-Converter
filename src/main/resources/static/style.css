@@ -605,3 +605,26 @@ input::-webkit-inner-spin-button {
         font-size: 1rem;
     }
 }
+/* --- Portfolio Link --- */
+.portfolio-link {
+    position: fixed; /* Stays in the same place even if the page is scrolled */
+    bottom: 25px;
+    left: 25px;
+    z-index: 1000; /* Ensures it's on top of other content */
+}
+
+.portfolio-link img {
+    width: 45px;
+    height: 45px;
+    background-color: #52030300; /* Adds a solid background in case your logo is transparent */
+    border-radius: 50%;      /* Makes the image container circular */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* A nice, subtle shadow to lift it off the page */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooths the hover effect */
+    display: block;
+}
+
+/* --- Hover Effect --- */
+.portfolio-link a:hover img {
+    transform: scale(1.1); /* Slightly enlarges the icon on hover */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25); /* Enhances the shadow on hover */
+}
